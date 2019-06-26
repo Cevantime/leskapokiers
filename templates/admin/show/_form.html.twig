@@ -1,0 +1,30 @@
+{{ form_start(form) }}
+{% for field in ['title', 'bigImage', 'smallImage', 'creationDate', 'summary', 'tape', 'critics', 'rewards'] %}
+    {{ form_row(form[field]) }}
+{% endfor %}
+<div class="form-group">
+    {{ form_label(form.images) }}
+    <ul class="form-gallery row" data-prototype="{{ form_row(form.images.vars.prototype) | e('html_attr') }}">
+        {% if form.images is not empty %}
+            {% for mediaField in form.images %}
+                <li class="col-md-2">
+                    <button class="delete-gallery-medium"><i class="fa fa-trash"></i></button>
+                    {{ form_row(mediaField) }}
+                </li>
+            {% endfor %}
+        {% else %}
+            {{ form_widget(form.images) }}
+        {% endif %}
+
+        <li class="col-md-2">
+            <button class="btn btn-default add-gallery-medium">Ajouter un média</button>
+        </li>
+    </ul>
+    {% for field in ['presskit', 'actors', 'author', 'director'] %}
+        {{ form_row(form[field]) }}
+    {% endfor %}
+</div>
+<button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
+{{ form_end(form) }}
+
+

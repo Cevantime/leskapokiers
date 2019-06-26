@@ -1,0 +1,8 @@
+{% for show in last_shows %}
+<li class="nav-item">
+    <a href="{{ path('admin_show_show', {id: show.id}) }}" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>{{ show.title }}</p>
+    </a>
+</li>
+{% endfor %}

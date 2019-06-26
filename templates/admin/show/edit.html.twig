@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Édition du spectacle "{{ show.title }}"{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("css/selectize.css") }}"/>
+{% endblock %}
+
+{% block body %}
+    <h1>Édition du Spectacle "{{ show.title }}"</h1>
+
+    {{ include('admin/show/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a class="btn btn-primary" href="{{ path('admin_show_index') }}">Revenir à la liste des spectacles</a>
+
+    {{ include('admin/show/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/selectize.min.js') }}"></script>
+    <script src="{{ asset('js/admin/uid.js') }}"></script>
+    <script src="{{ asset('js/admin/gallery.js') }}"></script>
+    <script src="{{ asset('js/admin/makeselectable.js') }}"></script>
+    <script>
+        $(function(){
+            startGallery('.form-gallery')
+            selectize('#show_actors','pseudonym', 'pseudonym', '{{ path('admin_search_artist') }}');
+            selectize('#show_author','pseudonym', 'pseudonym', '{{ path('admin_search_artist') }}');
+            selectize('#show_director','pseudonym', 'pseudonym', '{{ path('admin_search_artist') }}');
+        }) ;
+    </script>
+{% endblock %}

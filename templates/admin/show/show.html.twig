@@ -1,0 +1,58 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Spectacles{% endblock %}
+
+{% block body %}
+    <h1> Les Spectacles</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ show.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ show.title }}</td>
+            </tr>
+            <tr>
+                <th>CreationDate</th>
+                <td>{{ show.creationDate ? show.creationDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Summary</th>
+                <td>{{ show.summary | raw}}</td>
+            </tr>
+            <tr>
+                <th>Tape</th>
+                <td>{{ show.tape }}</td>
+            </tr>
+            <tr>
+                <th>Critics</th>
+                <td>{{ show.critics | raw }}</td>
+            </tr>
+            <tr>
+                <th>Rewards</th>
+                <td>{{ show.rewards | raw }}</td>
+            </tr>
+            <tr>
+                <th>Comédiens</th>
+                <td>{{ show.actors | map(a => "#{a.pseudonym}") | join(', ', ' et ') }}</td>
+            </tr>
+            <tr>
+                <th>Metteur en scène</th>
+                <td>{{ show.director.pseudonym|default('') }}</td>
+            </tr>
+            <tr>
+                <th>Auteur</th>
+                <td>{{ show.author.pseudonym|default('') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('admin_show_index') }}">Revenir à la liste des spectacles</a>
+
+    <a class="btn btn-success" href="{{ path('admin_show_edit', {'id': show.id}) }}">Modifier</a>
+
+    {{ include('admin/show/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,71 @@
+
+{% block medium_row %}
+    {% spaceless %}
+        <{{ element|default('div') }} class="form-group medium-row" id="{{ form.vars.id }}">
+        <div class="form-group">
+            <div class="image-preview">
+                <img class="img-fluid" src="{{ form.vars.value.thumbnail|default('https://www.placehold.it/1920x1080') }}"
+                     alt="{{ form.vars.data.selected|default('new medium') }}">
+            </div>
+            <{{ element|default('div') }} class="custom-file">
+            {%- set type = type|default('file') -%}
+            {% for field in ['apiId', 'mimeType', 'source'] %}
+                {{ form_row(form.children[field]) }}
+            {% endfor %}
+            <div class="btn-duo">
+                {{ form_row(form.children['uploaded']) }}
+                {{ form_row(form.children['browsed']) }}
+            </div>
+            <label for="{{ form.vars.id }}" class="custom-file-label">
+                {%- if attr.placeholder is defined -%}
+                    {{- translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label }}
+                {%- endif -%}
+            </label>
+            </{{ element|default('div') }}>
+        </div>
+        <script>
+            setTimeout(function () {
+                var $medium = $('#{{ form.vars.id }}');
+                var input = $medium.find('input[type="file"]')[0];
+                $(input).on('change', function (e) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            // e.target.result
+                            var $img = $medium.find('img');
+                            ['apiId', 'mimeType', 'source'].forEach(function(field){
+                                $medium.find('[name*="['+field+']"]').val('');
+                            });
+                            $img.attr('src', e.target.result);
+                        };
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                });
+console.log($medium.find('.form-group button'));
+                $medium.find('.form-group button').filebrowser({
+                    callback: function (file) {
+                        console.log(file);
+                        $medium.find('[name*="[source]"]').val(file.src);
+                        $medium.find('[name*="[apiId]"]').val(file.id);
+                        $medium.find('[name*="[mimeType]"]').val(file.type);
+                        if (file.type === 'video/mp4') {
+                            $medium.find('img').attr('alt', file.infos.fullpath);
+                        } else {
+                            $medium.find('img').attr('src', file.src);
+                        }
+                    },
+                    filters: '{{ form.vars.mime_filters }}',
+                    access_token: '{{ app.request.server.get('UPLOAD_KEY') }}',
+                    folder: '{{ form.vars.opened_folder }}',
+                    host: '{{ app.request.server.get('UPLOAD_SERVER') }}'
+                });
+            }, 500);
+
+        </script>
+        </{{ element|default('div') }}>
+    {% endspaceless %}
+{% endblock %}
