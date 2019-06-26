@@ -18,8 +18,6 @@ class IndexController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index/index.html.twig', [
-
-        ]);
+        return $this->redirectToRoute('admin_show_index');
     }
 }
